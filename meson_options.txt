@@ -1,0 +1,3 @@
+option('fast-heartbeat', type: 'boolean', value: false, description: 'Enable faster heartbeat rate')
+option('packet-socket', type: 'boolean', value: true, description : 'Enable packet socket support')
+option('usb', type: 'boolean', value: true, description : 'Enable USB support')

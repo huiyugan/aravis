@@ -1,2 +1,3 @@
-#define VERSION "@version@"
-#define PACKAGE_VERSION "@version@"
+#mesondefine PACKAGE_VERSION
+#mesondefine ARAVIS_BUILD_PACKET_SOCKET
+#mesondefine ARAVIS_FAST_HEARTBEAT
