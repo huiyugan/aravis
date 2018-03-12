@@ -170,3 +170,6 @@ foreach p: progs
 		c_args: cflags,
 		dependencies: aravis_dependencies)
 endforeach
+
+if get_option ('introspection')
+endif

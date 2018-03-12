@@ -43,3 +43,9 @@ configure_file (input: 'arvconfig.h.in', output: 'arvconfig.h', configuration: c
 configuration_inc = include_directories ('.')
 
 subdir ('src')
+subdir ('tests')
+subdir ('viewer')
+
+if get_option ('documentation')
+	subdir ('docs')
+endif

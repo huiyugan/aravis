@@ -1,3 +1,15 @@
-option('fast-heartbeat', type: 'boolean', value: false, description: 'Enable faster heartbeat rate')
-option('packet-socket', type: 'boolean', value: true, description : 'Enable packet socket support')
-option('usb', type: 'boolean', value: true, description : 'Enable USB support')
+# Features
+
+option('packet-socket', type: 'boolean', value: true,
+  description : 'Enable packet socket support')
+option('usb', type: 'boolean', value: true,
+  description : 'Enable USB support')
+option('fast-heartbeat', type: 'boolean', value: false,
+  description: 'Enable faster heartbeat rate')
+
+# Documentation and introspection
+
+option('documentation', type: 'boolean', value: true,
+  description: 'Build API reference (requires gtk-doc and xlstproc)')
+option('introspection', type: 'boolean', value: true,
+  description: 'Build introspection data (requires gobject-introspection)')
