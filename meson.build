@@ -42,9 +42,22 @@ config_data.set ('ARAVIS_FAST_HEARTBEAT', get_option ('fast-heartbeat'))
 configure_file (input: 'arvconfig.h.in', output: 'arvconfig.h', configuration: config_data)
 configuration_inc = include_directories ('.')
 
+subdir ('po')
 subdir ('src')
 subdir ('tests')
-subdir ('viewer')
+
+if get_option ('viewer')
+	gtk_dep = dependency ('gtk+-3.0', required: true)
+	gstreamer_base_dep = dependency ('gstreamer-base-1.0', required: true)
+	gstreamer_app_dep = dependency ('gstreamer-app-1.0', required: true)
+	gstreamer_video_dep = dependency ('gstreamer-video-1.0', required: true)
+	notify_dep = dependency ('libnotify', required: true)
+
+	aravis_viewer_dependencies = [aravis_dependencies, gtk_dep, gstreamer_base_dep, gstreamer_app_dep,
+		gstreamer_video_dep, notify_dep]
+
+	subdir ('viewer')
+endif
 
 if get_option ('documentation')
 	subdir ('docs')

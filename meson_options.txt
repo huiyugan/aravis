@@ -1,5 +1,7 @@
 # Features
 
+option('viewer', type: 'boolean', value: true,
+  description : 'Build simple viewer')
 option('packet-socket', type: 'boolean', value: true,
   description : 'Enable packet socket support')
 option('usb', type: 'boolean', value: true,
