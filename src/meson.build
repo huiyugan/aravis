@@ -130,13 +130,34 @@ no_introspection_headers = [
 	'arvgvsp.h'
 ]
 
+if get_option ('usb')
+	sources += [
+		'arvuvinterface.c',
+		'arvuvdevice.c',
+		'arvuvstream.c'
+	]
+	no_introspection_sources += [
+		'arvuvcp.c',
+		'arvuvsp.c'
+	]
+	headers += [
+		'arvuvinterface.h',
+		'arvuvdevice.h',
+		'arvuvstream.h'
+	]
+	no_introspection_headers += [
+		'arvuvcp.h',
+		'arvuvsp.h'
+		]
+endif
+
 enums = gnome.mkenums_simple ('arvenumtypes', sources: headers + no_introspection_headers)
 
 install_headers (headers)
 
 library_config_data = configuration_data ()
-library_config_data.set ('ARAVIS_HAS_USB', '0')
-library_config_data.set ('ARAVIS_HAS_PACKET_SOCKET', '0')
+library_config_data.set10 ('ARAVIS_HAS_USB', get_option ('usb'))
+library_config_data.set10 ('ARAVIS_HAS_PACKET_SOCKET', get_option ('packet-socket'))
 configure_file (input: 'arvfeatures.h.in', output: 'arvfeatures.h', configuration: library_config_data)
 
 version_config_data = configuration_data ()
@@ -144,6 +165,8 @@ version_config_data.set ('ARAVIS_MAJOR_VERSION', aravis_major_version)
 version_config_data.set ('ARAVIS_MINOR_VERSION', aravis_minor_version)
 version_config_data.set ('ARAVIS_MICRO_VERSION', aravis_micro_version)
 configure_file (input: 'arvversion.h.in', output: 'arvversion.h', configuration: version_config_data)
+
+library_inc = include_directories ('.')
 
 cflags = [
 	'-DARAVIS_COMPILATION',

@@ -19,5 +19,5 @@ cflags = [
 executable ( 'arv-viewer', sources,
 	link_with: aravis_library,
 	c_args: cflags,
-	include_directories: configuration_inc,
+	include_directories: [configuration_inc, library_inc],
 	dependencies: aravis_viewer_dependencies)
