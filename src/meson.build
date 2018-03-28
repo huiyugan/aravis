@@ -1,4 +1,4 @@
-sources = [
+library_sources = [
 	'arvenums.c',
 	'arvdebug.c',
 	'arvsystem.c',
@@ -56,7 +56,7 @@ sources = [
 	'arvxmlschema.c'
 ]
 
-no_introspection_sources = [
+library_no_introspection_sources = [
 	'arvmisc.c',
 	'arvzip.c',
 	'arvstr.c',
@@ -64,7 +64,7 @@ no_introspection_sources = [
 	'arvgvsp.c'
 ]
 
-headers = [
+library_headers = [
 	'arvenums.h',
 	'arvdebug.h',
 	'arvsystem.h',
@@ -122,7 +122,7 @@ headers = [
 	'arvxmlschema.h'
 ]
 
-no_introspection_headers = [
+library_no_introspection_headers = [
 	'arvmisc.h',
 	'arvzip.h',
 	'arvstr.h',
@@ -131,56 +131,63 @@ no_introspection_headers = [
 ]
 
 if get_option ('usb')
-	sources += [
+	library_sources += [
 		'arvuvinterface.c',
 		'arvuvdevice.c',
 		'arvuvstream.c'
 	]
-	no_introspection_sources += [
+	library_no_introspection_sources += [
 		'arvuvcp.c',
 		'arvuvsp.c'
 	]
-	headers += [
+	library_headers += [
 		'arvuvinterface.h',
 		'arvuvdevice.h',
 		'arvuvstream.h'
 	]
-	no_introspection_headers += [
+	library_no_introspection_headers += [
 		'arvuvcp.h',
 		'arvuvsp.h'
 		]
 endif
 
-enums = gnome.mkenums_simple ('arvenumtypes', sources: headers + no_introspection_headers)
+library_enums = gnome.mkenums_simple ('arvenumtypes', sources: library_headers + library_no_introspection_headers)
 
-install_headers (headers)
+library_include_dir = join_paths (get_option ('includedir'), 'aravis-@0@'.format (aravis_api_version))
 
 library_config_data = configuration_data ()
 library_config_data.set10 ('ARAVIS_HAS_USB', get_option ('usb'))
 library_config_data.set10 ('ARAVIS_HAS_PACKET_SOCKET', get_option ('packet-socket'))
-configure_file (input: 'arvfeatures.h.in', output: 'arvfeatures.h', configuration: library_config_data)
+configure_file (input: 'arvfeatures.h.in', output: 'arvfeatures.h',
+		configuration: library_config_data, install_dir: library_include_dir)
 
 version_config_data = configuration_data ()
 version_config_data.set ('ARAVIS_MAJOR_VERSION', aravis_major_version)
 version_config_data.set ('ARAVIS_MINOR_VERSION', aravis_minor_version)
 version_config_data.set ('ARAVIS_MICRO_VERSION', aravis_micro_version)
-configure_file (input: 'arvversion.h.in', output: 'arvversion.h', configuration: version_config_data)
+configure_file (input: 'arvversion.h.in', output: 'arvversion.h',
+		configuration: version_config_data, install_dir: library_include_dir)
 
 library_inc = include_directories ('.')
 
-cflags = [
+install_headers (library_headers, install_dir: library_include_dir)
+
+library_c_args = [
 	'-DARAVIS_COMPILATION',
          '-DARAVIS_DATA_DIR="@0@"'.format (get_option ('datadir')),
 	 '-DARAVIS_API_VERSION="@0@"'.format (aravis_api_version)
 	 ]
 
-aravis_library = shared_library ('aravis-@0@'.format (aravis_api_version),
-	sources, headers, no_introspection_sources, no_introspection_headers, enums,
+aravis_library = library ('aravis-@0@'.format (aravis_api_version),
+	library_sources, library_headers,
+	library_no_introspection_sources, library_no_introspection_headers,
+	library_enums,
 	version: aravis_version,
 	soversion: '0',
 	dependencies: aravis_dependencies,
-	c_args: cflags,
-	include_directories: configuration_inc)
+	c_args: library_c_args,
+	include_directories: configuration_inc,
+	install: true)
 
 progs = [[ 'arv-tool', 			'arvtool.c'],
 	 [ 'arv-test',			'arvtest.c'],
@@ -190,9 +197,21 @@ foreach p: progs
 	executable ((p[0] + '-@0@').format (aravis_api_version),
 		p[1],
 		link_with: aravis_library,
-		c_args: cflags,
-		dependencies: aravis_dependencies)
+		c_args: library_c_args,
+		dependencies: aravis_dependencies,
+		install: true)
 endforeach
 
 if get_option ('introspection')
+	gnome.generate_gir(aravis_library,
+			   sources : [library_sources, library_headers, library_enums],
+			   nsversion : aravis_api_version,
+			   namespace : 'Aravis',
+			   symbol_prefix : 'arv_',
+			   identifier_prefix : 'Arv',
+			   export_packages : 'aravis',
+			   includes : ['GObject-2.0', 'Gio-2.0'],
+			   extra_args: '-DARAVIS_COMPILATION',
+			   install : true
+			  )
 endif

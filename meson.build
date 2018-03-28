@@ -35,7 +35,10 @@ if enable_usb
 endif
 
 config_data = configuration_data ()
+config_data.set_quoted ('PACKAGE_NAME', 'aravis')
 config_data.set_quoted ('PACKAGE_VERSION', aravis_version)
+config_data.set_quoted ('PACKAGE', 'aravis')
+config_data.set_quoted ('VERSION', aravis_version)
 config_data.set ('ARAVIS_BUILD_PACKET_SOCKET', enable_packet_socket)
 config_data.set ('ARAVIS_BUILD_USB', enable_usb)
 config_data.set ('ARAVIS_FAST_HEARTBEAT', get_option ('fast-heartbeat'))
@@ -57,6 +60,15 @@ if get_option ('viewer')
 		gstreamer_video_dep, notify_dep]
 
 	subdir ('viewer')
+endif
+
+if get_option ('gst-plugin')
+	gstreamer_base_dep = dependency ('gstreamer-base-1.0', required: true)
+	gstreamer_app_dep = dependency ('gstreamer-app-1.0', required: true)
+
+	gst_plugin_dependencies = [aravis_dependencies, gstreamer_base_dep]
+
+	subdir ('gst')
 endif
 
 if get_option ('documentation')

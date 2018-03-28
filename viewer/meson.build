@@ -1,14 +1,14 @@
-sources = [
+viewer_sources = [
 	'main.c',
 	'arvviewer.c'
 ]
 
-headers = [
+viewer_headers = [
 	'arvviewertypes.h',
 	'arvviewer.h'
 ]
 
-cflags = [
+viewer_c_args = [
 	'-I../src',
 	'-DPACKAGE_LOCALE_DIR="@0@/locale"'.format (get_option ('prefix')),
 	'-DARAVIS_DATA_DIR="@0@"'.format (get_option ('datadir')),
@@ -16,8 +16,9 @@ cflags = [
 	'-DARAVIS_ICON_DIR="@0@/icons"'.format (get_option ('datadir'))
 ]
 
-executable ( 'arv-viewer', sources,
+executable ( 'arv-viewer', viewer_sources, viewer_headers,
 	link_with: aravis_library,
-	c_args: cflags,
+	c_args: viewer_c_args,
 	include_directories: [configuration_inc, library_inc],
-	dependencies: aravis_viewer_dependencies)
+	dependencies: aravis_viewer_dependencies,
+	install: true)

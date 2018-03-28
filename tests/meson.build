@@ -1,10 +1,10 @@
 tests = [
-	['evaluator',	['-I../src']],
-	['buffer', 	['-I../src']],
-	['misc', 	['-I../src']],
-	['fake',	['-I../src', '-DGENICAM_FILENAME="../src/arv-fake-camera.xml"']],
-	['fakegv',	['-I../src', '-DGENICAM_FILENAME="../src/arv-fake-camera.xml"']],
-	['genicam',	['-I../src', '-DGENICAM_FILENAME="../tests/data/genicam.xml"']]
+	['evaluator',	[]],
+	['buffer', 	[]],
+	['misc', 	[]],
+	['fake',	['-DGENICAM_FILENAME="../src/arv-fake-camera.xml"']],
+	['fakegv',	['-DGENICAM_FILENAME="../src/arv-fake-camera.xml"']],
+	['genicam',	['-DGENICAM_FILENAME="../tests/data/genicam.xml"']]
 ]
 
 foreach t: tests
@@ -34,7 +34,6 @@ examples = [
 
 foreach example: examples
   exe = executable (example[0], example[1],
-    c_args: '-I../src',
     link_with: aravis_library,
     dependencies: aravis_dependencies,
     include_directories: [configuration_inc, library_inc])
