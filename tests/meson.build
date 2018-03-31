@@ -2,9 +2,9 @@ tests = [
 	['evaluator',	[]],
 	['buffer', 	[]],
 	['misc', 	[]],
-	['fake',	['-DGENICAM_FILENAME="../src/arv-fake-camera.xml"']],
-	['fakegv',	['-DGENICAM_FILENAME="../src/arv-fake-camera.xml"']],
-	['genicam',	['-DGENICAM_FILENAME="../tests/data/genicam.xml"']]
+	['fake',	['-DGENICAM_FILENAME="@0@/src/arv-fake-camera.xml"'.format (meson.source_root ())]],
+	['fakegv',	['-DGENICAM_FILENAME="@0@/src/arv-fake-camera.xml"'.format (meson.source_root ())]],
+	['genicam',	['-DGENICAM_FILENAME="@0@/tests/data/genicam.xml"'.format (meson.source_root ())]]
 ]
 
 foreach t: tests
