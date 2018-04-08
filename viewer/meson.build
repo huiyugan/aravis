@@ -22,3 +22,5 @@ executable ( 'arv-viewer', viewer_sources, viewer_headers,
 	include_directories: [configuration_inc, library_inc],
 	dependencies: aravis_viewer_dependencies,
 	install: true)
+
+subdir ('data')

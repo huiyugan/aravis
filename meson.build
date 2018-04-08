@@ -1,6 +1,7 @@
 project ('aravis', 'c', 'cpp', version: '0.5.11')
 
 gnome = import('gnome')
+i18n = import ('i18n')
 
 aravis_version = meson.project_version ()
 aravis_api_version = '0.6'
@@ -9,6 +10,8 @@ versions = aravis_version.split ('.')
 aravis_major_version = versions[0].to_int ()
 aravis_minor_version = versions[1].to_int ()
 aravis_micro_version = versions[2].to_int ()
+
+desktopdir = join_paths (get_option ('datadir'), 'applications')
 
 cc = meson.get_compiler ('c')
 cxx = meson.get_compiler ('cpp')
