@@ -172,9 +172,11 @@ library_inc = include_directories ('.')
 
 install_headers (library_headers, install_dir: library_include_dir)
 
+install_data ('arv-fake-camera.xml', install_dir: aravis_data_dir)
+
 library_c_args = [
 	'-DARAVIS_COMPILATION',
-         '-DARAVIS_DATA_DIR="@0@"'.format (get_option ('datadir')),
+         '-DARAVIS_DATA_DIR="@0@"'.format (join_paths(get_option ('prefix'), aravis_data_dir)),
 	 '-DARAVIS_API_VERSION="@0@"'.format (aravis_api_version)
 	 ]
 
