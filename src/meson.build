@@ -65,6 +65,8 @@ library_no_introspection_sources = [
 ]
 
 library_headers = [
+	'arv.h',
+	'arvtypes.h',
 	'arvenums.h',
 	'arvdebug.h',
 	'arvsystem.h',
