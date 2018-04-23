@@ -193,6 +193,15 @@ aravis_library = library ('aravis-@0@'.format (aravis_api_version),
 	include_directories: configuration_inc,
 	install: true)
 
+pkg.generate (libraries: [aravis_library, libm],
+	      filebase: 'aravis-@0@'.format (aravis_api_version),
+	      version: aravis_version,
+	      subdirs: 'aravis-@0@'.format (aravis_api_version),
+	      name: 'Aravis',
+	      description: 'Camera control and image acquisition library',
+	      requires: aravis_dependency_str,
+	      requires_private: aravis_private_dependency_str)
+
 progs = [[ 'arv-tool', 			'arvtool.c'],
 	 [ 'arv-test',			'arvtest.c'],
 	 [ 'arv-fake-gv-camera', 	'arvfakegvcamera.c']]

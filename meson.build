@@ -2,6 +2,7 @@ project ('aravis', 'c', 'cpp', version: '0.5.11')
 
 gnome = import('gnome')
 i18n = import ('i18n')
+pkg = import ('pkgconfig')
 
 aravis_version = meson.project_version ()
 aravis_api_version = '0.6'
@@ -27,16 +28,20 @@ libz_dep = dependency ('zlib', required: true)
 libm = cc.find_library ('m', required: true)
 
 aravis_dependencies = [glib_dep, gobject_dep, gio_dep, xml2_dep, libz_dep, libm]
+aravis_dependency_str = 'glib-2.0 gobject-2.0 gio-2.0'
+aravis_private_dependency_str = 'libxml-2.0 zlib'
 
 enable_packet_socket = get_option ('packet-socket')
 if enable_packet_socket
 	aravis_dependencies += dependency ('libcap-ng', required: true)
 	aravis_dependencies += dependency ('audit', required: true)
+	aravis_private_dependency_str += ' libcap-ng audit'
 endif
 
 enable_usb = get_option ('usb')
 if enable_usb
 	aravis_dependencies += dependency ('libusb-1.0', required: true)
+	aravis_private_dependency_str += ' libusb-1.0'
 endif
 
 config_data = configuration_data ()
