@@ -193,6 +193,9 @@ aravis_library = library ('aravis-@0@'.format (aravis_api_version),
 	include_directories: configuration_inc,
 	install: true)
 
+aravis_library_dependencies = declare_dependency (dependencies: aravis_dependencies,
+						  link_with: aravis_library)
+
 pkg.generate (libraries: [aravis_library, libm],
 	      filebase: 'aravis-@0@'.format (aravis_api_version),
 	      version: aravis_version,
